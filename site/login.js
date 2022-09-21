@@ -1,17 +1,62 @@
-import {
-    getLoggedInUser,
-    findUser,
-    updateUser,
-    getUserIndex
-} from './user.js';
+function Login(props) {
+    const ctx = React.useContext(UserContext);
 
-function Login() {
-    const [status, setStatus]       = React.useState('');
+    const getLoggedInUser = () => {
+        return ctx.users.find(user => user.loggedin === true);
+    }
+    
+    const findUser = (fieldName) => {
+        let array = ctx.users;
+        const arrayCopy = [...array];
+        return arrayCopy.find(user => user.name.toLowerCase() == fieldName.toLowerCase());
+    }
+
+    const getUserIndex = (userID) => {
+        const array = ctx.users;
+        return array.findIndex(user => user.userID === userID);
+    }
+
+    const updateUser = (theUser, action = undefined, amount = undefined) => {
+        let array = ctx.users;
+        const arrayCopy = [...array];
+        const index = getUserIndex(theUser.userID);
+        let actionTaken = false;
+        switch (action) {
+            case 'login':
+                theUser.loggedin = true;
+                actionTaken = true;
+                break;
+            case 'logout':
+                theUser.loggedin = false;
+                actionTaken = true;
+                break;
+            default:
+                console.log('Action not found.');
+        }
+        if (actionTaken) {
+            arrayCopy[index] = theUser;
+            array = [...arrayCopy];
+            return true;
+        }
+        else {
+            console.log('User not updated.');
+            return false;
+        }
+        
+    }
+    
     const [name, setName]           = React.useState('');
     const [password, setPassword]   = React.useState('');   
-    const ctx = React.useContext(UserContext);
-    const [show, setShow]           = React.useState((ctx.users.findIndex(user => user.loggedin === true) > -1 ? false : true));
+    const [show, setShow]           = React.useState(
+                                        (ctx.users.findIndex(user => user.loggedin === true) > -1 ? 
+                                        false : true)
+                                      );
+    const [status, setStatus]       = React.useState(
+                                        (ctx.users.findIndex(user => user.loggedin === true) > -1 ? 
+                                        'Welcome back, ' + getLoggedInUser().name + '!' : '')
+                                      );
     
+
     //initLoginPage();
 
     const initLoginPage = () => {
@@ -20,7 +65,7 @@ function Login() {
         if (loggedInUser != undefined) {
             setStatus(`Welcome back, ${loggedInUser.name}!`);
             setShow(false);
-            return false
+            return false;
         }
         else {
             setShow(true);
@@ -49,6 +94,7 @@ function Login() {
         if (userUpdated) {
             setStatus(`Welcome back, ${name}!`);
             console.log(ctx.users);
+            props.childToParent(getLoggedInUser().loggedin);
             setShow(false);
         }
         else {
@@ -62,6 +108,7 @@ function Login() {
         if (userUpdated) {
             setName('');
             setPassword('');
+            props.childToParent(getLoggedInUser().loggedin);
             setShow(true);
             setStatus('You have successfully logged out.');
             setTimeout(() => setStatus(''), 3000);   

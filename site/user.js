@@ -1,5 +1,7 @@
 const ctx = React.useContext(UserContext);
 
+const userIsLoggedIn = () => (ctx.users.findIndex(user => user.loggedin === true) > -1);
+
 const getLoggedInUser = () => {
     return ctx.users.find(user => user.loggedin === true);
 }

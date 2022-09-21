@@ -1,12 +1,21 @@
 function Spa() {
+
+    const [loggedIn, setLoggedIn] = React.useState(false);
+
+    const childToParent = (childdata) => {
+        setLoggedIn(childdata)
+    } 
+
     return (
         
             <HashRouter>
-                <NavBar />
-                <UserContext.Provider value={{users:[{userID: 1, name:'dyral', email:'dyral@mit.edu', password:'secret', balance:100}], maxUserID: 1}}>
+                <NavBar isLoggedIn={loggedIn} />
+                <UserContext.Provider value={{users:[{userID: 1, name:'dyral', email:'dyral@mit.edu', password:'secret', balance:100, loggedin:false}], maxUserID: 1}}>
                     <Route path="/" exact component={Home} />
                     <Route path="/CreateAccount/" component={CreateAccount} />
-                    <Route path="/login/" component={Login} />
+                    <Route path="/login/">
+                        <Login childToParent={childToParent} />
+                    </Route>
                     <Route path="/deposit/" component={Deposit} />
                     <Route path="/withdraw/" component={Withdraw} />
                     <Route path="/balance/" component={Balance} />
@@ -32,17 +41,20 @@ async function router() {
 
 function updateNavbar(newLink) {
     var linkElements = document.getElementsByClassName('nav-link');
-    // unhighlight all navbar links
+    // reset all navbar links
     for (let item of linkElements) {
         if (item.classList.contains('active')) item.classList.remove('active');
         if (item.hasAttribute('aria-current')) item.removeAttribute('aria-current');
     }
+
     //choose desired navbar link
     const newLinkID = newLink.replace(/#\//g, '').toLowerCase() + '_link';
     const newLinkElement = document.getElementById(newLinkID);
-    // highlight desired navbar link
-    newLinkElement.classList.add('active');
-    newLinkElement.setAttribute('aria-current', 'page');
+    if (newLinkElement != null) {
+        // highlight desired navbar link
+        newLinkElement.classList.add('active');
+        newLinkElement.setAttribute('aria-current', 'page');
+    }
 }
 
 window.addEventListener('hashchange', router);

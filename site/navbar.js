@@ -1,4 +1,5 @@
-function NavBar() {
+function NavBar(props) {
+      
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container-fluid">
@@ -17,12 +18,16 @@ function NavBar() {
                         <li className="nav-item">
                             <a className="nav-link" id="login_link" href="#/login">Login</a>
                         </li>
-                        <li className="nav-item">
-                            <a className="nav-link" id="deposit_link" href="#/deposit">Deposit</a>
-                        </li>
-                        <li className="nav-item">
-                            <a className="nav-link" id="withdraw_link" href="#/withdraw">Withdraw</a>
-                        </li>
+                        {props.isLoggedIn &&
+                        <>
+                            <li className="nav-item">
+                                <a className="nav-link" id="deposit_link" href="#/deposit">Deposit</a>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" id="withdraw_link" href="#/withdraw">Withdraw</a>
+                            </li>
+                        </>    
+                        }
                         <li className="nav-item">
                             <a className="nav-link" id="balance_link" href="#/balance">Balance</a>
                         </li>
