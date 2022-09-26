@@ -24,9 +24,9 @@ function NavBar() {
                         <li className="nav-item d-none" id="withdraw_item">
                             <a className="nav-link" id="withdraw_link" href="#/withdraw">Withdraw</a>
                         </li>
-                        <li className="nav-item">
+                        {/* <li className="nav-item">
                             <a className="nav-link" id="balance_link" href="#/balance">Balance</a>
-                        </li>
+                        </li> */}
                         <li className="nav-item">
                             <a className="nav-link" id="alldata_link" href="#/alldata">All Data</a>
                         </li>
