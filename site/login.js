@@ -1,5 +1,5 @@
 function Login(props) {
-    const ctx = React.useContext(UserContext);
+    const ctx       = React.useContext(UserContext);
 
     const getLoggedInUser = () => {
         return ctx.users.find(user => user.loggedin === true);
@@ -56,7 +56,8 @@ function Login(props) {
                                         'Welcome back, ' + getLoggedInUser().name + '!' : '')
                                       );
     
-
+    
+    const [loggedIn, setLoggedIn] = React.useState(false);
     //initLoginPage();
 
     const initLoginPage = () => {
@@ -73,6 +74,16 @@ function Login(props) {
         }
 
     } 
+
+    function toggleDisplay(id) {
+        const element = document.getElementById(id);
+        if (element.classList.contains('d-none')) {
+            element.classList.remove('d-none');
+        }
+        else {
+            element.classList.add('d-none');
+        }
+    }
 
     function validate(fieldName, fieldPassword, label) {
         let theUser = findUser(fieldName);
@@ -92,9 +103,9 @@ function Login(props) {
         let theUser = findUser(name);
         let userUpdated = updateUser(theUser, 'login');
         if (userUpdated) {
+            toggleDisplay('deposit_item');
+            toggleDisplay('withdraw_item');
             setStatus(`Welcome back, ${name}!`);
-            console.log(ctx.users);
-            props.childToParent(getLoggedInUser().loggedin);
             setShow(false);
         }
         else {
@@ -108,8 +119,9 @@ function Login(props) {
         if (userUpdated) {
             setName('');
             setPassword('');
-            props.childToParent(getLoggedInUser().loggedin);
             setShow(true);
+            toggleDisplay('deposit_item');
+            toggleDisplay('withdraw_item');
             setStatus('You have successfully logged out.');
             setTimeout(() => setStatus(''), 3000);   
         }

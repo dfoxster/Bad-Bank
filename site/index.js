@@ -1,20 +1,14 @@
 function Spa() {
 
-    const [loggedIn, setLoggedIn] = React.useState(false);
-
-    const childToParent = (childdata) => {
-        setLoggedIn(childdata)
-    } 
-
     return (
         
             <HashRouter>
-                <NavBar isLoggedIn={loggedIn} />
                 <UserContext.Provider value={{users:[{userID: 1, name:'dyral', email:'dyral@mit.edu', password:'secret', balance:100, loggedin:false}], maxUserID: 1}}>
+                    <NavBar />
                     <Route path="/" exact component={Home} />
                     <Route path="/CreateAccount/" component={CreateAccount} />
                     <Route path="/login/">
-                        <Login childToParent={childToParent} />
+                        <Login />
                     </Route>
                     <Route path="/deposit/" component={Deposit} />
                     <Route path="/withdraw/" component={Withdraw} />
